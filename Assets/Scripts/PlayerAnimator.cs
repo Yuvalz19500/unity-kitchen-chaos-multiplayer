@@ -6,15 +6,15 @@ public class PlayerAnimator : MonoBehaviour
 
     [SerializeField] private Player player;
 
-    private Animator animator;
+    private Animator _animator;
 
     private void Awake()
     {
-        animator = GetComponent<Animator>();
+        _animator = GetComponent<Animator>();
     }
 
     private void Update()
     {
-        animator.SetBool(IsWalkingAnimId, player.IsWalking());
+        _animator.SetBool(IsWalkingAnimId, player.IsWalking());
     }
 }
