@@ -25,6 +25,12 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     private void Start()
     {
         gameInput.OnInteractAction += GameInputOnInteractAction;
+        gameInput.OnInteractAlternateAction += GameInputOnInteractAlternateAction;
+    }
+
+    private void GameInputOnInteractAlternateAction(object sender, EventArgs e)
+    {
+        if (_selectedCounter != null) _selectedCounter.InteractAlternate(this);
     }
 
     private void Update()
@@ -98,7 +104,8 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         Vector3 moveDirectionX = new(moveDirection.x, 0, 0);
         moveDirectionX.Normalize();
 
-        canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight,
+        canMove = moveDirection.x != 0f && !Physics.CapsuleCast(transform.position,
+            transform.position + Vector3.up * playerHeight,
             playerRadius, moveDirectionX, moveDistance);
 
         if (canMove)
