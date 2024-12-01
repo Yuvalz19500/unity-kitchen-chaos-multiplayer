@@ -1,20 +1,16 @@
 using System;
+using ScriptableObjects;
 using UnityEngine;
 
 namespace Counters
 {
-    public class CuttingCounter : BaseCounter
+    public class CuttingCounter : BaseCounter, IHasProgress
     {
         [SerializeField] private CuttingRecipeSO[] cuttingRecipesSO;
 
         private int _cuttingProgress;
 
-        public event EventHandler<OnCuttingProgressChangedArgs> OnCuttingProgressChanged;
-        public class OnCuttingProgressChangedArgs : EventArgs
-        {
-            public float ProgressNormalized;
-        }
-
+        public event EventHandler<IHasProgress.OnProgressChangedArgs> OnProgressChanged;
         public event EventHandler OnCut;
 
         public override void Interact(Player player)
@@ -40,13 +36,15 @@ namespace Counters
         {
             if (!HasKitchenObject() || !HasRecipeForKitchenObjectSO(GetKitchenObject().GetKitchenObjectSO())) return;
 
-            CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeSOForKitchenObjectSO(GetKitchenObject().GetKitchenObjectSO());
+            CuttingRecipeSO cuttingRecipeSO =
+                GetCuttingRecipeSOForKitchenObjectSO(GetKitchenObject().GetKitchenObjectSO());
             SetCuttingProgress(_cuttingProgress + 1, cuttingRecipeSO);
             OnCut?.Invoke(this, EventArgs.Empty);
-        
+
             if (_cuttingProgress < cuttingRecipeSO.requiredCuttingSteps) return;
 
-            KitchenObjectSO outputKitchenObjectSO = GetOutputCutKitchenObjectSO(GetKitchenObject().GetKitchenObjectSO());
+            KitchenObjectSO outputKitchenObjectSO =
+                GetOutputCutKitchenObjectSO(GetKitchenObject().GetKitchenObjectSO());
             GetKitchenObject().DestroySelf();
 
             KitchenObject.SpawnKitchenObject(outputKitchenObjectSO, this);
@@ -78,7 +76,9 @@ namespace Counters
         private void SetCuttingProgress(int progress, CuttingRecipeSO cuttingRecipeSO)
         {
             _cuttingProgress = progress;
-            OnCuttingProgressChanged?.Invoke(this, new OnCuttingProgressChangedArgs() { ProgressNormalized = (float)progress / cuttingRecipeSO.requiredCuttingSteps });
+            OnProgressChanged?.Invoke(this,
+                new IHasProgress.OnProgressChangedArgs()
+                    { ProgressNormalized = (float)progress / cuttingRecipeSO.requiredCuttingSteps });
         }
     }
 }

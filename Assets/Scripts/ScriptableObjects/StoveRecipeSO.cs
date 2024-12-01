@@ -3,10 +3,10 @@ using UnityEngine;
 namespace ScriptableObjects
 {
     [CreateAssetMenu]
-    public class CuttingRecipeSO : ScriptableObject
+    public class StoveRecipeSO : ScriptableObject
     {
         public KitchenObjectSO input;
         public KitchenObjectSO output;
-        public int requiredCuttingSteps;
+        public int fryingTimerMax;
     }
 }
