@@ -14,6 +14,12 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     private KitchenObject _kitchenObject;
     private Vector3 _lastInteractDirection;
     private BaseCounter _selectedCounter;
+    
+    public event EventHandler<OnSelectedCounterChangeEventArgs> OnSelectedCounterChanged;
+    public class OnSelectedCounterChangeEventArgs : EventArgs
+    {
+        public BaseCounter SelectedCounter;
+    }
 
     public static Player Instance { get; private set; }
 
@@ -63,8 +69,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     {
         return _kitchenObject != null;
     }
-
-    public event EventHandler<OnSelectedCounterChangeEventArgs> OnSelectedCounterChanged;
+    
 
     private void GameInputOnInteractAction(object sender, EventArgs e)
     {
@@ -153,10 +158,5 @@ public class Player : MonoBehaviour, IKitchenObjectParent
 
         OnSelectedCounterChanged?.Invoke(this,
             new OnSelectedCounterChangeEventArgs { SelectedCounter = _selectedCounter });
-    }
-
-    public class OnSelectedCounterChangeEventArgs : EventArgs
-    {
-        public BaseCounter SelectedCounter;
     }
 }
