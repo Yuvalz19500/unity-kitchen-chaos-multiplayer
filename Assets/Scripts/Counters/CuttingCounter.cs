@@ -29,6 +29,15 @@ namespace Counters
                 {
                     GetKitchenObject().SetKitchenObjectParent(player);
                 }
+                else
+                {
+                    if (!player.GetKitchenObject().TryGetPlate(out PlateKitchenObject plateKitchenObject)) return;
+
+                    if (plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectSO()))
+                    {
+                        GetKitchenObject().DestroySelf();
+                    }
+                }
             }
         }
 

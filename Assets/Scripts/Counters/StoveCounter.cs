@@ -114,15 +114,30 @@ namespace Counters
             }
             else
             {
-                if (player.HasKitchenObject()) return;
-
-                GetKitchenObject().SetKitchenObjectParent(player);
-                ChangeStoveState(StoveCounterState.Idle);
-                
-                OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedArgs
+                if (player.HasKitchenObject())
                 {
-                    ProgressNormalized = 0f
-                });
+                    if (!player.GetKitchenObject().TryGetPlate(out PlateKitchenObject plateKitchenObject)) return;
+                    if (!plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectSO())) return;
+                    
+                    GetKitchenObject().DestroySelf();
+                        
+                    ChangeStoveState(StoveCounterState.Idle);
+                
+                    OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedArgs
+                    {
+                        ProgressNormalized = 0f
+                    });
+                }
+                else
+                {
+                    GetKitchenObject().SetKitchenObjectParent(player);
+                    ChangeStoveState(StoveCounterState.Idle);
+                
+                    OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedArgs
+                    {
+                        ProgressNormalized = 0f
+                    });
+                }
             }
         }
 
