@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using ScriptableObjects;
 using UnityEngine;
-using System;
 
 public class PlateKitchenObject : KitchenObject
 {
@@ -25,5 +24,10 @@ public class PlateKitchenObject : KitchenObject
         
         OnIngredientAdded?.Invoke(this, new OnIngredientAddedEventArgs { KitchenObjectSO = kitchenObjectSO });
         return true;
+    }
+    
+    public List<KitchenObjectSO> GetKitchenObjectsSOList()
+    {
+        return _kitchenObjectsSOList;
     }
 }
