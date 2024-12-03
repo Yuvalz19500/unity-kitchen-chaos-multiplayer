@@ -14,6 +14,8 @@ namespace UI
         {
             playButton.onClick.AddListener(() => { Loader.Load(Loader.Scenes.GameScene); });
             quitButton.onClick.AddListener(Application.Quit);
+
+            Time.timeScale = 1f;
         }
     }
 }

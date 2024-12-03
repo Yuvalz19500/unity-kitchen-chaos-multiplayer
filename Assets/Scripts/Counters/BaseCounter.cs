@@ -11,6 +11,11 @@ namespace Counters
 
         public static event EventHandler OnAnyObjectPlaced;
 
+        public static void ResetStaticData()
+        {
+            OnAnyObjectPlaced = null;
+        }
+
         public Transform GetKitchenObjectFollowTransform()
         {
             return counterTopPoint.transform;
@@ -20,10 +25,7 @@ namespace Counters
         {
             _kitchenObject = kitchenObject;
 
-            if (_kitchenObject)
-            {
-                OnAnyObjectPlaced?.Invoke(this, EventArgs.Empty);
-            }
+            if (_kitchenObject) OnAnyObjectPlaced?.Invoke(this, EventArgs.Empty);
         }
 
         public KitchenObject GetKitchenObject()

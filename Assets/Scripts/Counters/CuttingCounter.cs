@@ -14,6 +14,11 @@ namespace Counters
         public event EventHandler<IHasProgress.OnProgressChangedArgs> OnProgressChanged;
         public event EventHandler OnCut;
 
+        public new static void ResetStaticData()
+        {
+            OnAnyCut = null;
+        }
+
         public override void Interact(Player player)
         {
             if (!HasKitchenObject())
@@ -35,9 +40,7 @@ namespace Counters
                     if (!player.GetKitchenObject().TryGetPlate(out PlateKitchenObject plateKitchenObject)) return;
 
                     if (plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectSO()))
-                    {
                         GetKitchenObject().DestroySelf();
-                    }
                 }
             }
         }
@@ -74,12 +77,8 @@ namespace Counters
         private CuttingRecipeSO GetCuttingRecipeSOForKitchenObjectSO(KitchenObjectSO inputKitchenObjectSO)
         {
             foreach (CuttingRecipeSO cuttingRecipeSO in cuttingRecipesSO)
-            {
                 if (cuttingRecipeSO.input == inputKitchenObjectSO)
-                {
                     return cuttingRecipeSO;
-                }
-            }
 
             return null;
         }
