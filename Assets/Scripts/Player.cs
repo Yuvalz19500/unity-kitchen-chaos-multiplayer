@@ -16,6 +16,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     private Vector3 _lastInteractDirection;
     private BaseCounter _selectedCounter;
     
+    public event EventHandler OnPickSomething;
     public event EventHandler<OnSelectedCounterChangeEventArgs> OnSelectedCounterChanged;
     public class OnSelectedCounterChangeEventArgs : EventArgs
     {
@@ -35,11 +36,6 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         gameInput.OnInteractAlternateAction += GameInputOnInteractAlternateAction;
     }
 
-    private void GameInputOnInteractAlternateAction(object sender, EventArgs e)
-    {
-        if (_selectedCounter != null) _selectedCounter.InteractAlternate(this);
-    }
-
     private void Update()
     {
         HandleMovement();
@@ -54,6 +50,11 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     public void SetKitchenObject(KitchenObject kitchenObject)
     {
         _kitchenObject = kitchenObject;
+
+        if (_kitchenObject)
+        {
+            OnPickSomething?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     public KitchenObject GetKitchenObject()
@@ -74,7 +75,16 @@ public class Player : MonoBehaviour, IKitchenObjectParent
 
     private void GameInputOnInteractAction(object sender, EventArgs e)
     {
+        if(!GameManager.Instance.IsGamePlaying()) return;
+        
         if (_selectedCounter != null) _selectedCounter.Interact(this);
+    }
+    
+    private void GameInputOnInteractAlternateAction(object sender, EventArgs e)
+    {
+        if(!GameManager.Instance.IsGamePlaying()) return;
+        
+        if (_selectedCounter != null) _selectedCounter.InteractAlternate(this);
     }
 
     public bool IsWalking()

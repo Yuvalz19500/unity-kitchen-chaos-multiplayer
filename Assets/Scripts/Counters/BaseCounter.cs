@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Counters
@@ -8,6 +9,8 @@ namespace Counters
 
         private KitchenObject _kitchenObject;
 
+        public static event EventHandler OnAnyObjectPlaced;
+
         public Transform GetKitchenObjectFollowTransform()
         {
             return counterTopPoint.transform;
@@ -16,6 +19,11 @@ namespace Counters
         public void SetKitchenObject(KitchenObject kitchenObject)
         {
             _kitchenObject = kitchenObject;
+
+            if (_kitchenObject)
+            {
+                OnAnyObjectPlaced?.Invoke(this, EventArgs.Empty);
+            }
         }
 
         public KitchenObject GetKitchenObject()

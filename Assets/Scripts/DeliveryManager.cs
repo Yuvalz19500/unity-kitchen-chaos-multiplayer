@@ -14,16 +14,15 @@ public class DeliveryManager : MonoBehaviour
 
     private readonly List<OrderSO> _waitingOrdersSO = new();
     private float _spawnRecipeTimer;
+    private int sucessfulOrders;
 
     public event EventHandler OnOrderCreated;
     public event EventHandler OnOrderDelivered;
+    public event EventHandler OnOrderFailed;
 
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
+        if (Instance == null) Instance = this;
     }
 
     private void Update()
@@ -67,13 +66,22 @@ public class DeliveryManager : MonoBehaviour
             if (!plateMatchesOrder) continue;
 
             _waitingOrdersSO.Remove(orderSO);
+            sucessfulOrders++;
+
             OnOrderDelivered?.Invoke(this, EventArgs.Empty);
             return;
         }
+
+        OnOrderFailed?.Invoke(this, EventArgs.Empty);
     }
-    
+
     public List<OrderSO> GetWaitingOrdersSO()
     {
         return _waitingOrdersSO;
+    }
+
+    public int GetSucessfulOrders()
+    {
+        return sucessfulOrders;
     }
 }

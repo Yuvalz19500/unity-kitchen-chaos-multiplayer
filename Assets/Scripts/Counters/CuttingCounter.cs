@@ -10,6 +10,7 @@ namespace Counters
 
         private int _cuttingProgress;
 
+        public static event EventHandler OnAnyCut;
         public event EventHandler<IHasProgress.OnProgressChangedArgs> OnProgressChanged;
         public event EventHandler OnCut;
 
@@ -49,6 +50,7 @@ namespace Counters
                 GetCuttingRecipeSOForKitchenObjectSO(GetKitchenObject().GetKitchenObjectSO());
             SetCuttingProgress(_cuttingProgress + 1, cuttingRecipeSO);
             OnCut?.Invoke(this, EventArgs.Empty);
+            OnAnyCut?.Invoke(this, EventArgs.Empty);
 
             if (_cuttingProgress < cuttingRecipeSO.requiredCuttingSteps) return;
 
