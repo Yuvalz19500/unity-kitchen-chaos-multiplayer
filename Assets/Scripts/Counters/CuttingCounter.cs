@@ -1,5 +1,6 @@
 using System;
 using ScriptableObjects;
+using UI;
 using UnityEngine;
 
 namespace Counters
@@ -19,7 +20,7 @@ namespace Counters
             OnAnyCut = null;
         }
 
-        public override void Interact(Player player)
+        public override void Interact(Player.Player player)
         {
             if (!HasKitchenObject())
             {
@@ -45,7 +46,7 @@ namespace Counters
             }
         }
 
-        public override void InteractAlternate(Player player)
+        public override void InteractAlternate(Player.Player player)
         {
             if (!HasKitchenObject() || !HasRecipeForKitchenObjectSO(GetKitchenObject().GetKitchenObjectSO())) return;
 

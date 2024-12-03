@@ -9,7 +9,7 @@ namespace Counters
         [SerializeField] private KitchenObjectSO kitchenObjectSO;
         public event EventHandler OnPlayerGrabbedObject;
 
-        public override void Interact(Player player)
+        public override void Interact(Player.Player player)
         {
             if (player.HasKitchenObject()) return;
 

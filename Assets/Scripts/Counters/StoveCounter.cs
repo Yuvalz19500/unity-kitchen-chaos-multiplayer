@@ -1,5 +1,6 @@
 using System;
 using ScriptableObjects;
+using UI;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -79,7 +80,7 @@ namespace Counters
                         KitchenObject.SpawnKitchenObject(_stoveRecipeSO.output, this);
 
                         ChangeStoveState(StoveCounterState.Burned);
-                        
+
                         OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedArgs
                         {
                             ProgressNormalized = 0f
@@ -94,7 +95,7 @@ namespace Counters
             }
         }
 
-        public override void Interact(Player player)
+        public override void Interact(Player.Player player)
         {
             if (!HasKitchenObject())
             {
@@ -118,11 +119,11 @@ namespace Counters
                 {
                     if (!player.GetKitchenObject().TryGetPlate(out PlateKitchenObject plateKitchenObject)) return;
                     if (!plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectSO())) return;
-                    
+
                     GetKitchenObject().DestroySelf();
-                        
+
                     ChangeStoveState(StoveCounterState.Idle);
-                
+
                     OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedArgs
                     {
                         ProgressNormalized = 0f
@@ -132,7 +133,7 @@ namespace Counters
                 {
                     GetKitchenObject().SetKitchenObjectParent(player);
                     ChangeStoveState(StoveCounterState.Idle);
-                
+
                     OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedArgs
                     {
                         ProgressNormalized = 0f
@@ -149,12 +150,8 @@ namespace Counters
         private StoveRecipeSO GetStoveRecipeSOForKitchenObjectSO(KitchenObjectSO inputKitchenObjectSO)
         {
             foreach (StoveRecipeSO fryingRecipeSO in stoveRecipesSO)
-            {
                 if (fryingRecipeSO.input == inputKitchenObjectSO)
-                {
                     return fryingRecipeSO;
-                }
-            }
 
             return null;
         }

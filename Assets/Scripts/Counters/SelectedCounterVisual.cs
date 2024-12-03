@@ -9,10 +9,10 @@ namespace Counters
 
         private void Start()
         {
-            Player.Instance.OnSelectedCounterChanged += PlayerOnSelectedCounterChanged;
+            Player.Player.Instance.OnSelectedCounterChanged += PlayerOnSelectedCounterChanged;
         }
 
-        private void PlayerOnSelectedCounterChanged(object sender, Player.OnSelectedCounterChangeEventArgs e)
+        private void PlayerOnSelectedCounterChanged(object sender, Player.Player.OnSelectedCounterChangeEventArgs e)
         {
             foreach (GameObject go in visualGameObjects) go.SetActive(e.SelectedCounter == baseCounter);
         }

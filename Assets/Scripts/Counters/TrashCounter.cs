@@ -11,7 +11,7 @@ namespace Counters
             OnAnyObjectTrashed = null;
         }
 
-        public override void Interact(Player player)
+        public override void Interact(Player.Player player)
         {
             if (!player.HasKitchenObject()) return;
 

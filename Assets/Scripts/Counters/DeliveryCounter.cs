@@ -8,17 +8,14 @@ namespace Counters
 
         private void Awake()
         {
-            if (Instance == null)
-            {
-                Instance = this;
-            }
+            if (Instance == null) Instance = this;
         }
 
-        public override void Interact(Player player)
+        public override void Interact(Player.Player player)
         {
             if (!player.HasKitchenObject() ||
                 !player.GetKitchenObject().TryGetPlate(out PlateKitchenObject plateKitchenObject)) return;
-            
+
             DeliveryManager.Instance.DeliverOrder(plateKitchenObject);
             player.GetKitchenObject().DestroySelf();
         }

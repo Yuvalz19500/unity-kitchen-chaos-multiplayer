@@ -2,7 +2,7 @@ namespace Counters
 {
     public class ClearCounter : BaseCounter
     {
-        public override void Interact(Player player)
+        public override void Interact(Player.Player player)
         {
             if (!HasKitchenObject())
             {
@@ -20,18 +20,14 @@ namespace Counters
                     if (player.GetKitchenObject().TryGetPlate(out PlateKitchenObject plateKitchenObject))
                     {
                         if (plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectSO()))
-                        {
                             GetKitchenObject().DestroySelf();
-                        }
                     }
                     else
                     {
                         if (!GetKitchenObject().TryGetPlate(out plateKitchenObject)) return;
-                        
+
                         if (plateKitchenObject.TryAddIngredient(player.GetKitchenObject().GetKitchenObjectSO()))
-                        {
                             player.GetKitchenObject().DestroySelf();
-                        }
                     }
                 }
             }
