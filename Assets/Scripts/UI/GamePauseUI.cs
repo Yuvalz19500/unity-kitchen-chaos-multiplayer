@@ -21,7 +21,7 @@ namespace UI
                 OptionsUI.Instance.Show(() =>
                 {
                     gameObject.SetActive(true);
-                    mainMenuButton.Select();
+                    resumeButton.Select();
                 });
             });
         }
@@ -42,7 +42,7 @@ namespace UI
         private void GameManagerOnGamePaused(object sender, EventArgs e)
         {
             gameObject.SetActive(true);
-            mainMenuButton.Select();
+            resumeButton.Select();
         }
     }
 }

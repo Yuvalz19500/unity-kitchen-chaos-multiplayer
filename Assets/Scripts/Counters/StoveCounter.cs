@@ -17,6 +17,7 @@ namespace Counters
         }
 
         [SerializeField] private StoveRecipeSO[] stoveRecipesSO;
+        [SerializeField] private float warningThreshold = 0.5f;
 
         private float _fryingTimer;
         private float _burningTimer;
@@ -162,6 +163,16 @@ namespace Counters
 
             OnStoveStateChanged?.Invoke(this,
                 new OnStoveStateChangedArgs { NewStoveCounterState = newStoveCounterState });
+        }
+
+        public bool IsFried()
+        {
+            return _currentStoveCounterState == StoveCounterState.Fried;
+        }
+
+        public float GetWarningThreshold()
+        {
+            return warningThreshold;
         }
     }
 }

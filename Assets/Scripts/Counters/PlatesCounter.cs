@@ -18,7 +18,7 @@ namespace Counters
 
         private void Update()
         {
-            if (_platesCount >= maxPlatesCount) return;
+            if (_platesCount >= maxPlatesCount || !GameManager.Instance.IsGamePlaying()) return;
 
             _spawnPlateTimer += Time.deltaTime;
 

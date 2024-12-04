@@ -14,7 +14,7 @@ public class DeliveryManager : MonoBehaviour
 
     private readonly List<OrderSO> _waitingOrdersSO = new();
     private float _spawnRecipeTimer;
-    private int sucessfulOrders;
+    private int _successfulOrders;
 
     public event EventHandler OnOrderCreated;
     public event EventHandler OnOrderDelivered;
@@ -27,7 +27,7 @@ public class DeliveryManager : MonoBehaviour
 
     private void Update()
     {
-        if (_waitingOrdersSO.Count >= maxOrders) return;
+        if (_waitingOrdersSO.Count >= maxOrders || !GameManager.Instance.IsGamePlaying()) return;
 
         _spawnRecipeTimer -= Time.deltaTime;
         if (!(_spawnRecipeTimer <= 0f)) return;
@@ -66,7 +66,7 @@ public class DeliveryManager : MonoBehaviour
             if (!plateMatchesOrder) continue;
 
             _waitingOrdersSO.Remove(orderSO);
-            sucessfulOrders++;
+            _successfulOrders++;
 
             OnOrderDelivered?.Invoke(this, EventArgs.Empty);
             return;
@@ -82,6 +82,6 @@ public class DeliveryManager : MonoBehaviour
 
     public int GetSucessfulOrders()
     {
-        return sucessfulOrders;
+        return _successfulOrders;
     }
 }

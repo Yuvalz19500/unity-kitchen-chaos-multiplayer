@@ -382,7 +382,7 @@ GameObject:
   - component: {fileID: 2766883842730687353}
   - component: {fileID: 7950085477205953266}
   m_Layer: 5
-  m_Name: KeyBindButton
+  m_Name: OptionsKeyBindButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
