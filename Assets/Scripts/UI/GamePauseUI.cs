@@ -15,7 +15,15 @@ namespace UI
         {
             resumeButton.onClick.AddListener(() => { GameManager.Instance.TogglePauseGame(); });
             mainMenuButton.onClick.AddListener(() => { Loader.Load(Loader.Scenes.MainMenuScene); });
-            optionsButton.onClick.AddListener(() => { OptionsUI.Instance.gameObject.SetActive(true); });
+            optionsButton.onClick.AddListener(() =>
+            {
+                gameObject.SetActive(false);
+                OptionsUI.Instance.Show(() =>
+                {
+                    gameObject.SetActive(true);
+                    mainMenuButton.Select();
+                });
+            });
         }
 
         private void Start()
@@ -34,6 +42,7 @@ namespace UI
         private void GameManagerOnGamePaused(object sender, EventArgs e)
         {
             gameObject.SetActive(true);
+            mainMenuButton.Select();
         }
     }
 }

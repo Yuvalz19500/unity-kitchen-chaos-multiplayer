@@ -120,7 +120,7 @@ namespace Player
             Vector3 moveDirectionX = new(moveDirection.x, 0, 0);
             moveDirectionX.Normalize();
 
-            canMove = moveDirection.x != 0f && !Physics.CapsuleCast(transform.position,
+            canMove = moveDirection.x is < -.5f or > .5f && !Physics.CapsuleCast(transform.position,
                 transform.position + Vector3.up * playerHeight,
                 playerRadius, moveDirectionX, moveDistance);
 
@@ -133,7 +133,8 @@ namespace Player
                 Vector3 moveDirectionZ = new(0, 0, moveDirection.z);
                 moveDirectionZ.Normalize();
 
-                canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight,
+                canMove = moveDirection.z is < -.5f or > .5f && !Physics.CapsuleCast(transform.position,
+                    transform.position + Vector3.up * playerHeight,
                     playerRadius, moveDirectionZ, moveDistance);
 
                 if (canMove) moveDirection = moveDirectionZ;

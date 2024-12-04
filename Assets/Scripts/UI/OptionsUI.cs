@@ -16,6 +16,8 @@ namespace UI
         [SerializeField] private TextMeshProUGUI soundFXText;
         [SerializeField] private TextMeshProUGUI musicText;
 
+        private Action _onCloseOptions;
+
         private void Awake()
         {
             if (Instance == null) Instance = this;
@@ -32,7 +34,12 @@ namespace UI
                 UpdateVisual();
             });
 
-            closeButton.onClick.AddListener(() => { gameObject.SetActive(false); });
+            closeButton.onClick.AddListener(() =>
+            {
+                gameObject.SetActive(false);
+
+                _onCloseOptions();
+            });
 
             gameObject.SetActive(false);
         }
@@ -53,6 +60,15 @@ namespace UI
         {
             soundFXText.text = "Sound Effect: " + Mathf.Round(SoundManager.Instance.GetVolume() * 10);
             musicText.text = "Music: " + Mathf.Round(MusicManager.Instance.GetVolume() * 10);
+        }
+
+        public void Show(Action onCloseOptions)
+        {
+            _onCloseOptions = onCloseOptions;
+
+            gameObject.SetActive(true);
+
+            soundFXButton.Select();
         }
     }
 }
