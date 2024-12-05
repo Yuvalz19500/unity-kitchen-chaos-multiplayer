@@ -7,6 +7,7 @@ namespace UI
     {
         private void Start()
         {
+            gameObject.SetActive(false);
             GameManager.Instance.OnStateChanged += GameManagerOnStateChanged;
         }
 

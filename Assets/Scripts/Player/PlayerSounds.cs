@@ -11,14 +11,14 @@ namespace Player
 
         private void Update()
         {
-            if (!Player.Instance.IsWalking()) return;
-
-            _footstepTimer -= Time.deltaTime;
-
-            if (!(_footstepTimer <= 0)) return;
-
-            _footstepTimer = footstepTimerMax;
-            SoundManager.Instance.PlayFootstepSound(Player.Instance.transform.position);
+            // if (!Player.Instance.IsWalking()) return;
+            //
+            // _footstepTimer -= Time.deltaTime;
+            //
+            // if (!(_footstepTimer <= 0)) return;
+            //
+            // _footstepTimer = footstepTimerMax;
+            // SoundManager.Instance.PlayFootstepSound(Player.Instance.transform.position);
         }
     }
 }

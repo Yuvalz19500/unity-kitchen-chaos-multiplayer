@@ -1,12 +1,12 @@
 using System;
 using Counters;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Player
 {
-    public class Player : MonoBehaviour, IKitchenObjectParent
+    public class Player : NetworkBehaviour, IKitchenObjectParent
     {
-        [SerializeField] private GameInput gameInput;
         [SerializeField] private float moveSpeed = 7f;
         [SerializeField] private float rotationSpeed = 10f;
         [SerializeField] private float interactDistance = 2f;
@@ -26,17 +26,10 @@ namespace Player
             public BaseCounter SelectedCounter;
         }
 
-        public static Player Instance { get; private set; }
-
-        private void Awake()
-        {
-            if (Instance == null) Instance = this;
-        }
-
         private void Start()
         {
-            gameInput.OnInteractAction += GameInputOnInteractAction;
-            gameInput.OnInteractAlternateAction += GameInputOnInteractAlternateAction;
+            GameInput.Instance.OnInteractAction += GameInputOnInteractAction;
+            GameInput.Instance.OnInteractAlternateAction += GameInputOnInteractAlternateAction;
         }
 
         private void Update()
@@ -94,7 +87,7 @@ namespace Player
 
         private void HandleMovement()
         {
-            Vector2 inputVector = gameInput.GetMovementVectorNormalized();
+            Vector2 inputVector = GameInput.Instance.GetMovementVectorNormalized();
             Vector3 moveDirection = new(inputVector.x, 0, inputVector.y);
 
             float moveDistance = moveSpeed * Time.deltaTime;
@@ -145,7 +138,7 @@ namespace Player
 
         private void HandleInteractions()
         {
-            Vector2 inputVector = gameInput.GetMovementVectorNormalized();
+            Vector2 inputVector = GameInput.Instance.GetMovementVectorNormalized();
             Vector3 moveDirection = new(inputVector.x, 0, inputVector.y);
 
             if (moveDirection != Vector3.zero) _lastInteractDirection = moveDirection;

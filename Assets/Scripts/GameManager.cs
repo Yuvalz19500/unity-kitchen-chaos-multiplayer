@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     [SerializeField] private float countdownToStartTime = 3f;
-    [SerializeField] private float gamePlayingTime = 10f;
+    [SerializeField] private float gamePlayingTime = 300f;
 
     private GameState _gameState;
     private float _gamePlayingTimer;
@@ -39,6 +39,8 @@ public class GameManager : MonoBehaviour
     {
         GameInput.Instance.OnPauseAction += GameInputOnPauseAction;
         GameInput.Instance.OnInteractAction += GameInputOnInteractAction;
+
+        ChangeState(GameState.CountdownToStart);
     }
 
     private void GameInputOnInteractAction(object sender, EventArgs e)
