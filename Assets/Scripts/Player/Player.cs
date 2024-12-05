@@ -26,13 +26,6 @@ namespace Player
             public BaseCounter SelectedCounter;
         }
 
-        public override void OnNetworkSpawn()
-        {
-            base.OnNetworkSpawn();
-
-            if (!IsOwner) enabled = false;
-        }
-
         private void Start()
         {
             GameInput.Instance.OnInteractAction += GameInputOnInteractAction;
@@ -41,13 +34,9 @@ namespace Player
 
         private void Update()
         {
-            Vector2 inputVector = GameInput.Instance.GetMovementVectorNormalized();
+            if (!IsOwner) return;
 
-            if (IsServer && IsLocalPlayer)
-                HandleMovement(inputVector);
-            else if (IsClient && IsLocalPlayer) HandleMovementServerRPC(inputVector);
-
-
+            HandleMovement();
             HandleInteractions();
         }
 
@@ -98,8 +87,9 @@ namespace Player
             return _isWalking;
         }
 
-        private void HandleMovement(Vector2 inputVector)
+        private void HandleMovement()
         {
+            Vector2 inputVector = GameInput.Instance.GetMovementVectorNormalized();
             Vector3 moveDirection = new(inputVector.x, 0, inputVector.y);
 
             float moveDistance = moveSpeed * Time.deltaTime;
@@ -115,12 +105,6 @@ namespace Player
             _isWalking = moveDirection != Vector3.zero;
 
             transform.forward = Vector3.Slerp(transform.forward, moveDirection, Time.deltaTime * rotationSpeed);
-        }
-
-        [ServerRpc]
-        private void HandleMovementServerRPC(Vector2 inputVector)
-        {
-            HandleMovement(inputVector);
         }
 
         private bool HandleWallHugging(bool canMove, float playerHeight, float playerRadius, float moveDistance,

@@ -16,17 +16,11 @@ namespace Player
             _animator = GetComponent<Animator>();
         }
 
-        [ServerRpc]
-        private void PlayWalingAnimationServerRPC()
-        {
-            _animator.SetBool(IsWalkingAnimId, player.IsWalking());
-        }
-
         private void Update()
         {
             if (!IsOwner) return;
 
-            PlayWalingAnimationServerRPC();
+            _animator.SetBool(IsWalkingAnimId, player.IsWalking());
         }
     }
 }

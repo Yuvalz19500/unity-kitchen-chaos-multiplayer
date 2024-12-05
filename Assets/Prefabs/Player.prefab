@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 8034043220049121894}
   - component: {fileID: 3363318798682966507}
   - component: {fileID: 3354108349920581109}
-  - component: {fileID: 5705439820097055493}
+  - component: {fileID: -555217922536765487}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -127,7 +127,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   footstepTimerMax: 0.1
---- !u!114 &5705439820097055493
+--- !u!114 &-555217922536765487
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -136,12 +136,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 2785447547515711353}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Script: {fileID: 11500000, guid: f0f0359b654ad6240ac089442661d101, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  NetworkTransformExpanded: 0
-  AuthorityMode: 0
+  NetworkTransformExpanded: 1
+  AuthorityMode: 1
   TickSyncChildren: 0
   UseUnreliableDeltas: 0
   SyncPositionX: 1
@@ -289,7 +289,7 @@ PrefabInstance:
       addedObject: {fileID: 513147626279678440}
     - targetCorrespondingSourceObject: {fileID: 3294758251327466535, guid: 1c5dda3c7cd3cf742afcade5419faeab, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2130166028557505793}
+      addedObject: {fileID: 5301708889143338049}
   m_SourcePrefab: {fileID: 100100000, guid: 1c5dda3c7cd3cf742afcade5419faeab, type: 3}
 --- !u!4 &4957541875986897121 stripped
 Transform:
@@ -335,8 +335,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d04cb0dbdd287324db226bd6618bbf73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   player: {fileID: 3363318798682966507}
---- !u!114 &2130166028557505793
+--- !u!114 &5301708889143338049
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -345,7 +346,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4957541875986897122}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
+  m_Script: {fileID: 11500000, guid: 010ec91eb95f64b478fd5a3dcc812deb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
