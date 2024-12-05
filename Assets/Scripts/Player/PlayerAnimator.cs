@@ -1,8 +1,9 @@
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Player
 {
-    public class PlayerAnimator : MonoBehaviour
+    public class PlayerAnimator : NetworkBehaviour
     {
         private static readonly int IsWalkingAnimId = Animator.StringToHash("IsWalking");
 
@@ -15,9 +16,17 @@ namespace Player
             _animator = GetComponent<Animator>();
         }
 
-        private void Update()
+        [ServerRpc]
+        private void PlayWalingAnimationServerRPC()
         {
             _animator.SetBool(IsWalkingAnimId, player.IsWalking());
+        }
+
+        private void Update()
+        {
+            if (!IsOwner) return;
+
+            PlayWalingAnimationServerRPC();
         }
     }
 }

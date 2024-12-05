@@ -34,6 +34,8 @@ namespace Player
 
         private void Update()
         {
+            if (!IsOwner) return;
+
             HandleMovement();
             HandleInteractions();
         }
@@ -88,6 +90,14 @@ namespace Player
         private void HandleMovement()
         {
             Vector2 inputVector = GameInput.Instance.GetMovementVectorNormalized();
+            HandleMovementServerRPC(inputVector);
+        }
+
+        [ServerRpc]
+        private void HandleMovementServerRPC(Vector2 inputVector)
+        {
+            if (!IsServer) return;
+
             Vector3 moveDirection = new(inputVector.x, 0, inputVector.y);
 
             float moveDistance = moveSpeed * Time.deltaTime;
@@ -104,6 +114,7 @@ namespace Player
 
             transform.forward = Vector3.Slerp(transform.forward, moveDirection, Time.deltaTime * rotationSpeed);
         }
+
 
         private bool HandleWallHugging(bool canMove, float playerHeight, float playerRadius, float moveDistance,
             ref Vector3 moveDirection)
