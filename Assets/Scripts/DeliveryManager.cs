@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using ScriptableObjects;
+using Unity.Netcode;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class DeliveryManager : MonoBehaviour
+public class DeliveryManager : NetworkBehaviour
 {
     public static DeliveryManager Instance { get; private set; }
 
@@ -23,26 +24,39 @@ public class DeliveryManager : MonoBehaviour
     private void Awake()
     {
         if (Instance == null) Instance = this;
+
+        _spawnRecipeTimer = spawnRecipeTimerMax;
     }
 
     private void Update()
     {
-        if (_waitingOrdersSO.Count >= maxOrders || !GameManager.Instance.IsGamePlaying()) return;
+        if (!IsServer) return;
+
+        if (_waitingOrdersSO.Count >= maxOrders || !GameManager.Instance.IsGamePlaying())
+            return;
 
         _spawnRecipeTimer -= Time.deltaTime;
         if (!(_spawnRecipeTimer <= 0f)) return;
 
+
         _spawnRecipeTimer = spawnRecipeTimerMax;
 
-        OrderSO newOrder = possibleOrdersListSO.ordersSO[Random.Range(0, possibleOrdersListSO.ordersSO.Count)];
-        _waitingOrdersSO.Add(newOrder);
+        SpawnNewWaitingOrderClientRpc(Random.Range(0, possibleOrdersListSO.ordersSO.Count));
+    }
+
+    [ClientRpc]
+    private void SpawnNewWaitingOrderClientRpc(int waitingOrderSOIndex)
+    {
+        OrderSO orderSO = possibleOrdersListSO.ordersSO[waitingOrderSOIndex];
+        _waitingOrdersSO.Add(orderSO);
         OnOrderCreated?.Invoke(this, EventArgs.Empty);
     }
 
     public void DeliverOrder(PlateKitchenObject plateKitchenObject)
     {
-        foreach (OrderSO orderSO in _waitingOrdersSO)
+        for (int index = 0; index < _waitingOrdersSO.Count; index++)
         {
+            OrderSO orderSO = _waitingOrdersSO[index];
             if (orderSO.kitchenObjectsSO.Count != plateKitchenObject.GetKitchenObjectsSOList().Count) continue;
 
             bool plateMatchesOrder = true;
@@ -65,14 +79,38 @@ public class DeliveryManager : MonoBehaviour
 
             if (!plateMatchesOrder) continue;
 
-            _waitingOrdersSO.Remove(orderSO);
-            _successfulOrders++;
-
-            OnOrderDelivered?.Invoke(this, EventArgs.Empty);
+            DeliverCorrectOrderServerRpc(index);
             return;
         }
 
+        DeliverIncorrectOrderServerRpc();
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void DeliverIncorrectOrderServerRpc()
+    {
+        DeliverIncorrectOrderClientRpc();
+    }
+
+    [ClientRpc]
+    private void DeliverIncorrectOrderClientRpc()
+    {
         OnOrderFailed?.Invoke(this, EventArgs.Empty);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void DeliverCorrectOrderServerRpc(int orderIndex)
+    {
+        DeliverCorrectOrderClientRpc(orderIndex);
+    }
+
+    [ClientRpc]
+    private void DeliverCorrectOrderClientRpc(int orderIndex)
+    {
+        _waitingOrdersSO.RemoveAt(orderIndex);
+        _successfulOrders++;
+
+        OnOrderDelivered?.Invoke(this, EventArgs.Empty);
     }
 
     public List<OrderSO> GetWaitingOrdersSO()

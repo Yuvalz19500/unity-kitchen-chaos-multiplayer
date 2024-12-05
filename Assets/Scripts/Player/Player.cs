@@ -7,6 +7,8 @@ namespace Player
 {
     public class Player : NetworkBehaviour, IKitchenObjectParent
     {
+        public static Player LocalInstance { get; private set; }
+
         [SerializeField] private float moveSpeed = 7f;
         [SerializeField] private float rotationSpeed = 10f;
         [SerializeField] private float interactDistance = 2f;
@@ -18,12 +20,29 @@ namespace Player
         private Vector3 _lastInteractDirection;
         private BaseCounter _selectedCounter;
 
+        public static event EventHandler OnAnyPlayerSpawned;
+        public static event EventHandler OnAnyPickedSomething;
         public event EventHandler OnPickSomething;
         public event EventHandler<OnSelectedCounterChangeEventArgs> OnSelectedCounterChanged;
 
         public class OnSelectedCounterChangeEventArgs : EventArgs
         {
             public BaseCounter SelectedCounter;
+        }
+
+        public static void ResetStaticData()
+        {
+            OnAnyPlayerSpawned = null;
+            OnAnyPickedSomething = null;
+        }
+
+        public override void OnNetworkSpawn()
+        {
+            base.OnNetworkSpawn();
+
+            if (IsOwner) LocalInstance = this;
+
+            OnAnyPlayerSpawned?.Invoke(this, EventArgs.Empty);
         }
 
         private void Start()
@@ -49,7 +68,10 @@ namespace Player
         {
             _kitchenObject = kitchenObject;
 
-            if (_kitchenObject) OnPickSomething?.Invoke(this, EventArgs.Empty);
+            if (!_kitchenObject) return;
+
+            OnPickSomething?.Invoke(this, EventArgs.Empty);
+            OnAnyPickedSomething?.Invoke(this, EventArgs.Empty);
         }
 
         public KitchenObject GetKitchenObject()

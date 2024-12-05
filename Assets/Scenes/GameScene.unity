@@ -1456,6 +1456,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 244040526}
+  - component: {fileID: 244040528}
   - component: {fileID: 244040527}
   m_Layer: 0
   m_Name: DeliveryManager
@@ -1491,9 +1492,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1290a2612986c7b4b89431a5873dd078, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   possibleOrdersListSO: {fileID: 11400000, guid: b5d40c7d91dd4f642862f102318909e1, type: 2}
   spawnRecipeTimerMax: 4
   maxOrders: 4
+--- !u!114 &244040528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 244040524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 1389641046
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!1 &257916216
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+
 
 namespace Counters
 {
@@ -9,7 +11,18 @@ namespace Counters
 
         private void Start()
         {
-            //Player.Player.Instance.OnSelectedCounterChanged += PlayerOnSelectedCounterChanged;
+            if (Player.Player.LocalInstance != null)
+                Player.Player.LocalInstance.OnSelectedCounterChanged += PlayerOnSelectedCounterChanged;
+            else
+                Player.Player.OnAnyPlayerSpawned += PlayerOnAnyPlayerSpawned;
+        }
+
+        private void PlayerOnAnyPlayerSpawned(object sender, EventArgs e)
+        {
+            if (Player.Player.LocalInstance == null) return;
+
+            Player.Player.LocalInstance.OnSelectedCounterChanged -= PlayerOnSelectedCounterChanged;
+            Player.Player.LocalInstance.OnSelectedCounterChanged += PlayerOnSelectedCounterChanged;
         }
 
         private void PlayerOnSelectedCounterChanged(object sender, Player.Player.OnSelectedCounterChangeEventArgs e)

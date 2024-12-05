@@ -10,6 +10,7 @@ namespace SceneManagement
             CuttingCounter.ResetStaticData();
             BaseCounter.ResetStaticData();
             TrashCounter.ResetStaticData();
+            Player.Player.ResetStaticData();
         }
     }
 }
