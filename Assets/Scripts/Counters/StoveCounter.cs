@@ -50,7 +50,7 @@ namespace Counters
 
                     if (_fryingTimer >= _stoveRecipeSO.fryingTimerMax)
                     {
-                        GetKitchenObject().DestroySelf();
+                        KitchenGameMultiplayer.Instance.DestroyKitchenObject(GetKitchenObject());
 
                         KitchenGameMultiplayer.Instance.SpawnKitchenObject(_stoveRecipeSO.output, this);
                         _stoveRecipeSO = GetStoveRecipeSOForKitchenObjectSO(GetKitchenObject().GetKitchenObjectSO());
@@ -76,7 +76,7 @@ namespace Counters
 
                     if (_burningTimer >= _stoveRecipeSO.fryingTimerMax)
                     {
-                        GetKitchenObject().DestroySelf();
+                        KitchenGameMultiplayer.Instance.DestroyKitchenObject(GetKitchenObject());
 
                         KitchenGameMultiplayer.Instance.SpawnKitchenObject(_stoveRecipeSO.output, this);
 
@@ -121,7 +121,7 @@ namespace Counters
                     if (!player.GetKitchenObject().TryGetPlate(out PlateKitchenObject plateKitchenObject)) return;
                     if (!plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectSO())) return;
 
-                    GetKitchenObject().DestroySelf();
+                    KitchenGameMultiplayer.Instance.DestroyKitchenObject(GetKitchenObject());
 
                     ChangeStoveState(StoveCounterState.Idle);
 

@@ -54,10 +54,9 @@ public class KitchenObject : NetworkBehaviour
         return _kitchenObjectParent;
     }
 
-    public void DestroySelf()
+    public void ClearKitchenObjectParent()
     {
         _kitchenObjectParent.ClearKitchenObject();
-        Destroy(gameObject);
     }
 
     public bool TryGetPlate(out PlateKitchenObject plateKitchenObject)

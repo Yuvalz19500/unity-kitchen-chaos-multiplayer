@@ -41,7 +41,7 @@ namespace Counters
                     if (!player.GetKitchenObject().TryGetPlate(out PlateKitchenObject plateKitchenObject)) return;
 
                     if (plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectSO()))
-                        GetKitchenObject().DestroySelf();
+                        KitchenGameMultiplayer.Instance.DestroyKitchenObject(GetKitchenObject());
                 }
             }
         }
@@ -60,7 +60,7 @@ namespace Counters
 
             KitchenObjectSO outputKitchenObjectSO =
                 GetOutputCutKitchenObjectSO(GetKitchenObject().GetKitchenObjectSO());
-            GetKitchenObject().DestroySelf();
+            KitchenGameMultiplayer.Instance.DestroyKitchenObject(GetKitchenObject());
 
             KitchenGameMultiplayer.Instance.SpawnKitchenObject(outputKitchenObjectSO, this);
         }

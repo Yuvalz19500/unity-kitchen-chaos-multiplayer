@@ -17,7 +17,7 @@ namespace Counters
                 !player.GetKitchenObject().TryGetPlate(out PlateKitchenObject plateKitchenObject)) return;
 
             DeliveryManager.Instance.DeliverOrder(plateKitchenObject);
-            player.GetKitchenObject().DestroySelf();
+            KitchenGameMultiplayer.Instance.DestroyKitchenObject(player.GetKitchenObject());
         }
     }
 }

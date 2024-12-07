@@ -1,5 +1,6 @@
 using System;
 using ScriptableObjects;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Counters
@@ -18,6 +19,8 @@ namespace Counters
 
         private void Update()
         {
+            if (!IsServer) return;
+
             if (_platesCount >= maxPlatesCount || !GameManager.Instance.IsGamePlaying()) return;
 
             _spawnPlateTimer += Time.deltaTime;
@@ -25,9 +28,33 @@ namespace Counters
             if (!(_spawnPlateTimer >= spawnPlateRate)) return;
 
             _spawnPlateTimer = 0f;
+            SpawnPlateServerRpc();
+        }
 
+        [ServerRpc]
+        private void SpawnPlateServerRpc()
+        {
+            SpawnPlateClientRpc();
+        }
+
+        [ClientRpc]
+        private void SpawnPlateClientRpc()
+        {
             _platesCount++;
             OnPlateSpawned?.Invoke(this, EventArgs.Empty);
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void InteractLogicServerRpc()
+        {
+            InteractLoginClientRpc();
+        }
+
+        [ClientRpc]
+        private void InteractLoginClientRpc()
+        {
+            _platesCount--;
+            OnPlateTaken?.Invoke(this, EventArgs.Empty);
         }
 
         public override void Interact(Player.Player player)
@@ -35,10 +62,9 @@ namespace Counters
             if (player.HasKitchenObject()) return;
             if (_platesCount <= 0) return;
 
-            _platesCount--;
-
             KitchenGameMultiplayer.Instance.SpawnKitchenObject(plateKitchenObjectSO, player);
-            OnPlateTaken?.Invoke(this, EventArgs.Empty);
+
+            InteractLogicServerRpc();
         }
     }
 }
