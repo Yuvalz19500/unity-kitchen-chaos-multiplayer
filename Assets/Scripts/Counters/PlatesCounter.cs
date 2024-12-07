@@ -37,7 +37,7 @@ namespace Counters
 
             _platesCount--;
 
-            KitchenObject.SpawnKitchenObject(plateKitchenObjectSO, player);
+            KitchenGameMultiplayer.Instance.SpawnKitchenObject(plateKitchenObjectSO, player);
             OnPlateTaken?.Invoke(this, EventArgs.Empty);
         }
     }

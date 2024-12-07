@@ -1,20 +1,18 @@
+using System;
 using ScriptableObjects;
+using Unity.Netcode;
 using UnityEngine;
 
-public class KitchenObject : MonoBehaviour
+public class KitchenObject : NetworkBehaviour
 {
     [SerializeField] private KitchenObjectSO kitchenObjectSO;
 
     private IKitchenObjectParent _kitchenObjectParent;
+    private FollowTransform _followTransform;
 
-    public static KitchenObject SpawnKitchenObject(KitchenObjectSO kitchenObjectSO, IKitchenObjectParent kitchenObjectParent)
+    private void Awake()
     {
-        GameObject kitchenGameObject = Instantiate(kitchenObjectSO.prefab);
-        KitchenObject kitchenObject = kitchenGameObject.GetComponent<KitchenObject>();
-        
-        kitchenObject.SetKitchenObjectParent(kitchenObjectParent);
-
-        return kitchenObject;
+        _followTransform = GetComponent<FollowTransform>();
     }
 
     public KitchenObjectSO GetKitchenObjectSO()
@@ -24,6 +22,22 @@ public class KitchenObject : MonoBehaviour
 
     public void SetKitchenObjectParent(IKitchenObjectParent kitchenObjectParent)
     {
+        SetKitchenObjectParentServerRpc(kitchenObjectParent.GetNetworkObject());
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SetKitchenObjectParentServerRpc(NetworkObjectReference kitchenObjectParentNetworkObjectReference)
+    {
+        SetKitchenObjectParentClientRpc(kitchenObjectParentNetworkObjectReference);
+    }
+
+    [ClientRpc]
+    private void SetKitchenObjectParentClientRpc(NetworkObjectReference kitchenObjectParentNetworkObjectReference)
+    {
+        kitchenObjectParentNetworkObjectReference.TryGet(out NetworkObject kitchenObjectParentNetworkObject);
+        IKitchenObjectParent kitchenObjectParent =
+            kitchenObjectParentNetworkObject.GetComponent<IKitchenObjectParent>();
+
         _kitchenObjectParent?.ClearKitchenObject();
 
         _kitchenObjectParent = kitchenObjectParent;
@@ -32,8 +46,7 @@ public class KitchenObject : MonoBehaviour
 
         _kitchenObjectParent.SetKitchenObject(this);
 
-        transform.parent = _kitchenObjectParent.GetKitchenObjectFollowTransform();
-        transform.localPosition = Vector3.zero;
+        _followTransform.SetTargetTransform(_kitchenObjectParent.GetKitchenObjectFollowTransform());
     }
 
     public IKitchenObjectParent GetKitchenObjectParent()

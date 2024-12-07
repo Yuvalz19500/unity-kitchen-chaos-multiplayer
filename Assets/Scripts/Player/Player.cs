@@ -89,6 +89,10 @@ namespace Player
             return _kitchenObject != null;
         }
 
+        public NetworkObject GetNetworkObject()
+        {
+            return NetworkObject;
+        }
 
         private void GameInputOnInteractAction(object sender, EventArgs e)
         {

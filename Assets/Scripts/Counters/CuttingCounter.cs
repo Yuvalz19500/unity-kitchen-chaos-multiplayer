@@ -62,7 +62,7 @@ namespace Counters
                 GetOutputCutKitchenObjectSO(GetKitchenObject().GetKitchenObjectSO());
             GetKitchenObject().DestroySelf();
 
-            KitchenObject.SpawnKitchenObject(outputKitchenObjectSO, this);
+            KitchenGameMultiplayer.Instance.SpawnKitchenObject(outputKitchenObjectSO, this);
         }
 
         private KitchenObjectSO GetOutputCutKitchenObjectSO(KitchenObjectSO inputKitchenObjectSO)

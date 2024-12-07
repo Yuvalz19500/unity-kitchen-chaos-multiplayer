@@ -52,7 +52,7 @@ namespace Counters
                     {
                         GetKitchenObject().DestroySelf();
 
-                        KitchenObject.SpawnKitchenObject(_stoveRecipeSO.output, this);
+                        KitchenGameMultiplayer.Instance.SpawnKitchenObject(_stoveRecipeSO.output, this);
                         _stoveRecipeSO = GetStoveRecipeSOForKitchenObjectSO(GetKitchenObject().GetKitchenObjectSO());
 
                         ChangeStoveState(StoveCounterState.Fried);
@@ -78,7 +78,7 @@ namespace Counters
                     {
                         GetKitchenObject().DestroySelf();
 
-                        KitchenObject.SpawnKitchenObject(_stoveRecipeSO.output, this);
+                        KitchenGameMultiplayer.Instance.SpawnKitchenObject(_stoveRecipeSO.output, this);
 
                         ChangeStoveState(StoveCounterState.Burned);
 

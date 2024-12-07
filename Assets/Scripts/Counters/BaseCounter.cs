@@ -1,9 +1,10 @@
 using System;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Counters
 {
-    public abstract class BaseCounter : MonoBehaviour, IKitchenObjectParent
+    public abstract class BaseCounter : NetworkBehaviour, IKitchenObjectParent
     {
         [SerializeField] private GameObject counterTopPoint;
 
@@ -41,6 +42,11 @@ namespace Counters
         public bool HasKitchenObject()
         {
             return _kitchenObject != null;
+        }
+
+        public NetworkObject GetNetworkObject()
+        {
+            return NetworkObject;
         }
 
         public abstract void Interact(Player.Player player);

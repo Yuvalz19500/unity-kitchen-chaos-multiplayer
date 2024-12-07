@@ -1,5 +1,6 @@
 using System;
 using ScriptableObjects;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Counters
@@ -9,13 +10,25 @@ namespace Counters
         [SerializeField] private KitchenObjectSO kitchenObjectSO;
         public event EventHandler OnPlayerGrabbedObject;
 
+        [ServerRpc(RequireOwnership = false)]
+        private void InteractLogicServerRpc()
+        {
+            InteractLoginClientRpc();
+        }
+
+        [ClientRpc]
+        private void InteractLoginClientRpc()
+        {
+            OnPlayerGrabbedObject?.Invoke(this, EventArgs.Empty);
+        }
+
         public override void Interact(Player.Player player)
         {
             if (player.HasKitchenObject()) return;
 
-            KitchenObject.SpawnKitchenObject(kitchenObjectSO, player);
+            KitchenGameMultiplayer.Instance.SpawnKitchenObject(kitchenObjectSO, player);
 
-            OnPlayerGrabbedObject?.Invoke(this, EventArgs.Empty);
+            InteractLogicServerRpc();
         }
     }
 }

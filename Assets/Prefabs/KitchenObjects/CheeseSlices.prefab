@@ -9,7 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 837602106355862445}
+  - component: {fileID: 7444912648657144686}
   - component: {fileID: -5311707502120651454}
+  - component: {fileID: -7614079932760107707}
   m_Layer: 0
   m_Name: CheeseSlices
   m_TagString: Untagged
@@ -33,6 +35,31 @@ Transform:
   - {fileID: 3376572422633204261}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7444912648657144686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6109878998748952050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 870481783
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!114 &-5311707502120651454
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45,7 +72,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9959b4bd39c20b46b34b2fa512bb70d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   kitchenObjectSO: {fileID: 11400000, guid: 711e55fccfc8819439fe0664981519b4, type: 2}
+--- !u!114 &-7614079932760107707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6109878998748952050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c55d41cf085a88343a18b01411385bc8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1887555463547337893
 PrefabInstance:
   m_ObjectHideFlags: 0
