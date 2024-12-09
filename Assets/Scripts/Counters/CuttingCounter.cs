@@ -1,6 +1,8 @@
 using System;
+using JetBrains.Annotations;
 using ScriptableObjects;
 using UI;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Counters
@@ -25,10 +27,12 @@ namespace Counters
             if (!HasKitchenObject())
             {
                 if (!player.HasKitchenObject()) return;
-
                 if (!HasRecipeForKitchenObjectSO(player.GetKitchenObject().GetKitchenObjectSO())) return;
-                player.GetKitchenObject().SetKitchenObjectParent(this);
-                SetCuttingProgress(0, GetCuttingRecipeSOForKitchenObjectSO(GetKitchenObject().GetKitchenObjectSO()));
+
+                KitchenObject kitchenObject = player.GetKitchenObject();
+                kitchenObject.SetKitchenObjectParent(this);
+
+                InteractLogicPlaceObjectServerRpc();
             }
             else
             {
@@ -50,12 +54,44 @@ namespace Counters
         {
             if (!HasKitchenObject() || !HasRecipeForKitchenObjectSO(GetKitchenObject().GetKitchenObjectSO())) return;
 
+            CutObjectServerRpc();
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void InteractLogicPlaceObjectServerRpc()
+        {
+            InteractLogicPlaceObjectClientRpc();
+        }
+
+        [ClientRpc]
+        private void InteractLogicPlaceObjectClientRpc()
+        {
+            SetCuttingProgress(0, null);
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void CutObjectServerRpc()
+        {
+            CutObjectClientRpc();
+
+            TestCuttingProgressDoneServerRpc();
+        }
+
+        [ClientRpc]
+        private void CutObjectClientRpc()
+        {
             CuttingRecipeSO cuttingRecipeSO =
                 GetCuttingRecipeSOForKitchenObjectSO(GetKitchenObject().GetKitchenObjectSO());
             SetCuttingProgress(_cuttingProgress + 1, cuttingRecipeSO);
             OnCut?.Invoke(this, EventArgs.Empty);
             OnAnyCut?.Invoke(this, EventArgs.Empty);
+        }
 
+        [ServerRpc(RequireOwnership = false)]
+        private void TestCuttingProgressDoneServerRpc()
+        {
+            CuttingRecipeSO cuttingRecipeSO =
+                GetCuttingRecipeSOForKitchenObjectSO(GetKitchenObject().GetKitchenObjectSO());
             if (_cuttingProgress < cuttingRecipeSO.requiredCuttingSteps) return;
 
             KitchenObjectSO outputKitchenObjectSO =
@@ -84,12 +120,12 @@ namespace Counters
             return null;
         }
 
-        private void SetCuttingProgress(int progress, CuttingRecipeSO cuttingRecipeSO)
+        private void SetCuttingProgress(int progress, [CanBeNull] CuttingRecipeSO cuttingRecipeSO)
         {
             _cuttingProgress = progress;
             OnProgressChanged?.Invoke(this,
                 new IHasProgress.OnProgressChangedArgs()
-                    { ProgressNormalized = (float)progress / cuttingRecipeSO.requiredCuttingSteps });
+                    { ProgressNormalized = (float)progress / cuttingRecipeSO?.requiredCuttingSteps ?? 0f });
         }
     }
 }
