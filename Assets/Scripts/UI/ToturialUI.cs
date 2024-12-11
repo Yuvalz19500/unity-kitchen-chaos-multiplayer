@@ -7,13 +7,12 @@ namespace UI
     {
         private void Start()
         {
-            gameObject.SetActive(false);
-            GameManager.Instance.OnStateChanged += GameManagerOnStateChanged;
+            GameManager.Instance.OnLocalPlayerReadyChanged += GameManagerOnLocalPlayerReadyChanged;
         }
 
-        private void GameManagerOnStateChanged(object sender, EventArgs e)
+        private void GameManagerOnLocalPlayerReadyChanged(object sender, EventArgs e)
         {
-            if (GameManager.Instance.IsCountdownToStartActive()) gameObject.SetActive(false);
+            if (GameManager.Instance.IsLocalPlayerReady()) gameObject.SetActive(false);
         }
     }
 }

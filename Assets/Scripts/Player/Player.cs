@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Counters;
 using Unity.Netcode;
 using UnityEngine;
@@ -13,7 +14,9 @@ namespace Player
         [SerializeField] private float rotationSpeed = 10f;
         [SerializeField] private float interactDistance = 2f;
         [SerializeField] private LayerMask countersLayerMask;
+        [SerializeField] private LayerMask collisionsLayerMask;
         [SerializeField] private GameObject kitchenObjectHoldPoint;
+        [SerializeField] private List<Vector3> spawnPoints;
 
         private bool _isWalking;
         private KitchenObject _kitchenObject;
@@ -42,6 +45,7 @@ namespace Player
 
             if (IsOwner) LocalInstance = this;
 
+            transform.position = spawnPoints[(int)OwnerClientId];
             OnAnyPlayerSpawned?.Invoke(this, EventArgs.Empty);
         }
 
@@ -121,8 +125,8 @@ namespace Player
             float moveDistance = moveSpeed * Time.deltaTime;
             const float playerRadius = 0.7f;
             const float playerHeight = 2f;
-            bool canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight,
-                playerRadius, moveDirection, moveDistance);
+            bool canMove = !Physics.BoxCast(transform.position, Vector3.one * playerRadius,
+                moveDirection, Quaternion.identity, moveDistance, collisionsLayerMask);
 
             canMove = HandleWallHugging(canMove, playerHeight, playerRadius, moveDistance, ref moveDirection);
 
@@ -141,9 +145,9 @@ namespace Player
             Vector3 moveDirectionX = new(moveDirection.x, 0, 0);
             moveDirectionX.Normalize();
 
-            canMove = moveDirection.x is < -.5f or > .5f && !Physics.CapsuleCast(transform.position,
-                transform.position + Vector3.up * playerHeight,
-                playerRadius, moveDirectionX, moveDistance);
+            canMove = moveDirection.x is < -.5f or > .5f && !Physics.BoxCast(transform.position,
+                Vector3.one * playerRadius,
+                moveDirectionX, Quaternion.identity, moveDistance, collisionsLayerMask);
 
             if (canMove)
             {
@@ -154,9 +158,9 @@ namespace Player
                 Vector3 moveDirectionZ = new(0, 0, moveDirection.z);
                 moveDirectionZ.Normalize();
 
-                canMove = moveDirection.z is < -.5f or > .5f && !Physics.CapsuleCast(transform.position,
-                    transform.position + Vector3.up * playerHeight,
-                    playerRadius, moveDirectionZ, moveDistance);
+                canMove = moveDirection.z is < -.5f or > .5f && !Physics.BoxCast(transform.position,
+                    Vector3.one * playerRadius,
+                    moveDirectionZ, Quaternion.identity, moveDistance, collisionsLayerMask);
 
                 if (canMove) moveDirection = moveDirectionZ;
             }
