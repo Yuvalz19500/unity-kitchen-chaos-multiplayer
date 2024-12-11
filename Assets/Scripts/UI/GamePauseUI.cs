@@ -28,18 +28,18 @@ namespace UI
 
         private void Start()
         {
-            GameManager.Instance.OnGamePaused += GameManagerOnGamePaused;
-            GameManager.Instance.OnGameResumed += GameManagerOnGameResumed;
+            GameManager.Instance.OnLocalGamePaused += LocalGameManagerOnLocalGamePaused;
+            GameManager.Instance.OnLocalGameResumed += LocalGameManagerOnLocalGameResumed;
 
             gameObject.SetActive(false);
         }
 
-        private void GameManagerOnGameResumed(object sender, EventArgs e)
+        private void LocalGameManagerOnLocalGameResumed(object sender, EventArgs e)
         {
             gameObject.SetActive(false);
         }
 
-        private void GameManagerOnGamePaused(object sender, EventArgs e)
+        private void LocalGameManagerOnLocalGamePaused(object sender, EventArgs e)
         {
             gameObject.SetActive(true);
             resumeButton.Select();

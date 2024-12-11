@@ -46,12 +46,12 @@ namespace UI
 
         private void Start()
         {
-            GameManager.Instance.OnGameResumed += GameManagerOnGameResumed;
+            GameManager.Instance.OnLocalGameResumed += LocalGameManagerOnLocalGameResumed;
 
             UpdateVisual();
         }
 
-        private void GameManagerOnGameResumed(object sender, EventArgs e)
+        private void LocalGameManagerOnLocalGameResumed(object sender, EventArgs e)
         {
             gameObject.SetActive(false);
         }
