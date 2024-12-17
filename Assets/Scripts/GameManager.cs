@@ -223,4 +223,9 @@ public class GameManager : NetworkBehaviour
     {
         return _isLocalPlayerReady;
     }
+
+    public bool IsWaitingToStart()
+    {
+        return _gameState.Value == GameState.WaitingToStart;
+    }
 }

@@ -74,4 +74,23 @@ public class KitchenGameMultiplayer : NetworkBehaviour
     {
         DestroyKitchenObjectServerRpc(kitchenObject.NetworkObject);
     }
+
+    public void StartHost()
+    {
+        NetworkManager.Singleton.ConnectionApprovalCallback += NetworkManagerConnectionApprovalCallback;
+        NetworkManager.Singleton.StartHost();
+    }
+
+    private void NetworkManagerConnectionApprovalCallback(
+        NetworkManager.ConnectionApprovalRequest connectionApprovalRequest,
+        NetworkManager.ConnectionApprovalResponse connectionApprovalResponse)
+    {
+        connectionApprovalResponse.Approved = GameManager.Instance.IsWaitingToStart();
+        connectionApprovalResponse.CreatePlayerObject = true;
+    }
+
+    public void StartClient()
+    {
+        NetworkManager.Singleton.StartClient();
+    }
 }
