@@ -12,6 +12,7 @@ namespace UI
         private void Start()
         {
             NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManagerOnClientDisconnectCallback;
+
             playAgainButton.onClick.AddListener(() =>
             {
                 NetworkManager.Singleton.Shutdown();
@@ -23,7 +24,9 @@ namespace UI
 
         private void NetworkManagerOnClientDisconnectCallback(ulong clientId)
         {
-            if (clientId == NetworkManager.ServerClientId) gameObject.SetActive(true);
+            if (NetworkManager.Singleton.IsHost && clientId == NetworkManager.Singleton.LocalClientId)
+                gameObject.SetActive(true);
+            else if (clientId == NetworkManager.ServerClientId) gameObject.SetActive(true);
         }
     }
 }

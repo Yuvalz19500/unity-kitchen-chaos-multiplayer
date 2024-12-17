@@ -13,7 +13,7 @@ namespace UI
 
         private void Awake()
         {
-            playButton.onClick.AddListener(() => { Loader.Load(Loader.Scenes.GameScene); });
+            playButton.onClick.AddListener(() => { Loader.Load(Loader.Scenes.LobbyScene); });
             quitButton.onClick.AddListener(Application.Quit);
 
             Time.timeScale = 1f;

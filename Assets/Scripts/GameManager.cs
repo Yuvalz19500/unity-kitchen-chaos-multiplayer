@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : NetworkBehaviour
 {
@@ -15,6 +16,7 @@ public class GameManager : NetworkBehaviour
 
     public static GameManager Instance { get; private set; }
 
+    [SerializeField] private GameObject playerPrefab;
     [SerializeField] private float countdownToStartTime = 3f;
     [SerializeField] private float gamePlayingTime = 300f;
 
@@ -25,7 +27,7 @@ public class GameManager : NetworkBehaviour
     private readonly Dictionary<ulong, bool> _playersReady = new();
     private readonly Dictionary<ulong, bool> _playersPause = new();
 
-    private bool _autoTestGamePauseState = false;
+    private bool _autoTestGamePauseState;
     private bool _isLocalGamePaused;
     private bool _isLocalPlayerReady;
 
@@ -56,10 +58,21 @@ public class GameManager : NetworkBehaviour
         if (!IsServer) return;
 
         NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManagerOnClientDisconnectCallback;
+        NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += NetworkManagerOnLoadEventCompleted;
 
         _gameState.Value = GameState.WaitingToStart;
         _gamePlayingTimer.Value = gamePlayingTime;
         _countdownTimer.Value = countdownToStartTime;
+    }
+
+    private void NetworkManagerOnLoadEventCompleted(string sceneName, LoadSceneMode loadSceneMode,
+        List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
+    {
+        foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
+        {
+            GameObject playerGameObject = Instantiate(playerPrefab);
+            playerGameObject.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId, true);
+        }
     }
 
     private void NetworkManagerOnClientDisconnectCallback(ulong clientId)

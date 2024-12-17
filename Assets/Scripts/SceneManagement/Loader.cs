@@ -1,3 +1,4 @@
+using Unity.Netcode;
 using UnityEngine.SceneManagement;
 
 namespace SceneManagement
@@ -8,7 +9,9 @@ namespace SceneManagement
         {
             MainMenuScene,
             GameScene,
-            LoadingScene
+            LoadingScene,
+            LobbyScene,
+            CharacterSelectScene
         }
 
         private static Scenes _targetScene;
@@ -23,6 +26,11 @@ namespace SceneManagement
         public static void LoaderCallback()
         {
             SceneManager.LoadScene(_targetScene.ToString());
+        }
+
+        public static void LoadNetworked(Scenes targetScene)
+        {
+            NetworkManager.Singleton.SceneManager.LoadScene(targetScene.ToString(), LoadSceneMode.Single);
         }
     }
 }
