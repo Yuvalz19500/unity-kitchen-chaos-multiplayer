@@ -22,10 +22,12 @@ public class GameManager : NetworkBehaviour
     private readonly NetworkVariable<float> _gamePlayingTimer = new();
     private readonly NetworkVariable<float> _countdownTimer = new();
     private readonly NetworkVariable<bool> _isGamePaused = new();
-    private bool _isLocalGamePaused;
-    private bool _isLocalPlayerReady;
     private readonly Dictionary<ulong, bool> _playersReady = new();
     private readonly Dictionary<ulong, bool> _playersPause = new();
+
+    private bool _autoTestGamePauseState = false;
+    private bool _isLocalGamePaused;
+    private bool _isLocalPlayerReady;
 
     public event EventHandler OnStateChanged;
     public event EventHandler OnLocalGamePaused;
@@ -53,9 +55,16 @@ public class GameManager : NetworkBehaviour
 
         if (!IsServer) return;
 
+        NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManagerOnClientDisconnectCallback;
+
         _gameState.Value = GameState.WaitingToStart;
         _gamePlayingTimer.Value = gamePlayingTime;
         _countdownTimer.Value = countdownToStartTime;
+    }
+
+    private void NetworkManagerOnClientDisconnectCallback(ulong clientId)
+    {
+        _autoTestGamePauseState = true;
     }
 
     private void IsGamePausedOnValueChanged(bool previousValue, bool newValue)
@@ -77,6 +86,14 @@ public class GameManager : NetworkBehaviour
     {
         GameInput.Instance.OnPauseAction += GameInputOnPauseAction;
         GameInput.Instance.OnInteractAction += GameInputOnInteractAction;
+    }
+
+    private void LateUpdate()
+    {
+        if (!_autoTestGamePauseState) return;
+
+        TestGamePauseState();
+        _autoTestGamePauseState = false;
     }
 
     private void GameInputOnInteractAction(object sender, EventArgs e)

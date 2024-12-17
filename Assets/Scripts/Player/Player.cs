@@ -47,6 +47,15 @@ namespace Player
 
             transform.position = spawnPoints[(int)OwnerClientId];
             OnAnyPlayerSpawned?.Invoke(this, EventArgs.Empty);
+
+            if (IsServer)
+                NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManagerOnClientDisconnectCallback;
+        }
+
+        private void NetworkManagerOnClientDisconnectCallback(ulong clientId)
+        {
+            if (OwnerClientId == clientId && HasKitchenObject())
+                KitchenGameMultiplayer.Instance.DestroyKitchenObject(GetKitchenObject());
         }
 
         private void Start()

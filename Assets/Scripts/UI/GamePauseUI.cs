@@ -1,5 +1,6 @@
 using System;
 using SceneManagement;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,7 +15,11 @@ namespace UI
         private void Awake()
         {
             resumeButton.onClick.AddListener(() => { GameManager.Instance.TogglePauseGame(); });
-            mainMenuButton.onClick.AddListener(() => { Loader.Load(Loader.Scenes.MainMenuScene); });
+            mainMenuButton.onClick.AddListener(() =>
+            {
+                NetworkManager.Singleton.Shutdown();
+                Loader.Load(Loader.Scenes.MainMenuScene);
+            });
             optionsButton.onClick.AddListener(() =>
             {
                 gameObject.SetActive(false);

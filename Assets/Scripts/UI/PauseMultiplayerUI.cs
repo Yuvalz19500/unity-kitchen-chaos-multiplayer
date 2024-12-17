@@ -7,18 +7,18 @@ namespace UI
     {
         private void Start()
         {
-            GameManager.Instance.OnLocalGamePaused += GameManagerOnLocalGamePaused;
-            GameManager.Instance.OnLocalGameResumed += GameManagerOnLocalGameResumed;
+            GameManager.Instance.OnMultiplayerGamePaused += GameManagerOnMultiplayerGamePaused;
+            GameManager.Instance.OnMultiplayerGameResumed += GameManagerOnMultiplayerGameResumed;
 
             gameObject.SetActive(false);
         }
 
-        private void GameManagerOnLocalGameResumed(object sender, EventArgs e)
+        private void GameManagerOnMultiplayerGameResumed(object sender, EventArgs e)
         {
             gameObject.SetActive(false);
         }
 
-        private void GameManagerOnLocalGamePaused(object sender, EventArgs e)
+        private void GameManagerOnMultiplayerGamePaused(object sender, EventArgs e)
         {
             gameObject.SetActive(true);
         }
