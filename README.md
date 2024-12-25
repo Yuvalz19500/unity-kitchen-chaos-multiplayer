@@ -66,4 +66,12 @@ To set up the project locally, follow these steps:
 4. **Build and Run**: Build the project for your target platform and run the game.
    
 ## Showcase
-Gameplay Screenshot Multiplayer Lobby Cooking Action
+![image](https://github.com/user-attachments/assets/5632b2f6-354e-41e3-bd7d-cf9c3c7ff165)
+
+![image](https://github.com/user-attachments/assets/9546b9f1-4d7d-4220-ae2b-a5dfbd149b67)
+
+![image](https://github.com/user-attachments/assets/9200bd29-a418-4671-9b5b-3156b4d8b82e)
+
+![image](https://github.com/user-attachments/assets/74f9e980-9361-4fc3-81d5-f8b804f9078f)
+
+![image](https://github.com/user-attachments/assets/44004bd5-85b1-4491-bf89-1dd5ec117b1e)
