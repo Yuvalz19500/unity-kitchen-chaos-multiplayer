@@ -241,4 +241,9 @@ public class GameManager : NetworkBehaviour
     {
         return _gameState.Value == GameState.WaitingToStart;
     }
+
+    public bool IsLocalGamePasued()
+    {
+        return _isLocalGamePaused;
+    }
 }

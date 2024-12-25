@@ -20,6 +20,8 @@ namespace UI
 
         private void GameManagerOnMultiplayerGamePaused(object sender, EventArgs e)
         {
+            if (GameManager.Instance.IsLocalGamePasued()) return;
+
             gameObject.SetActive(true);
         }
     }
